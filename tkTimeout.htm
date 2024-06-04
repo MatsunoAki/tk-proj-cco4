@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lex Time keeping</title>
+<style>
+:root{
+  --clr-neutral-900: hsl(207, 19%, 9%);
+  --clr-neutral-100: hsl(0, 0%, 100%);
+  --clr-accent-400: hsl(142, 09%, 61%)
+
+}
+
+body {
+  display: grid;
+  min-height: 100vh;
+  line-height: 1.6;
+  /* background-color: var(--clr-neutral-900); */
+  background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: sans-serif;
+}
+.greetings {
+    color: #fff;
+    width: 100%; /* Ensure heading takes full width */
+    text-align: center; /* Center the text */
+    margin-bottom: 10px; /* Add some space below the heading */
+
+}
+
+/*Cards*/
+.container {
+    display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start; /* Align items to the start of the flex container */
+        height: 300px; /* Set a height for the container */
+}
+.report-display {
+    position: absolute; /* Position it absolutely */
+    top: 0; /* Align it to the top */
+    right: 0; /* Align it to the right */
+    place-items: center;
+  color: var(--clr-neutral-100);
+  /* background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg); */
+  /*insert image*/
+  background-size: cover;
+  padding: 10rem 0 0;
+  width: 70ch;
+  max-height: 100ch;
+  border-radius: 0.5rem;
+      
+}
+.main-card, .report-card {
+    flex: 1; /* Make the divs expand to fill the available space */
+    width: 100%; /* Ensure each div takes full width */
+    place-items: center;
+  color: var(--clr-neutral-100);
+  /* background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg); */
+  /*insert image*/
+  background-size: cover;
+  padding: 1rem 0 0;
+  max-height: 100ch;
+  border-radius: 0.5rem;
+}
+/*WRAPPERS*/
+.wrapper {
+  margin-left: 10ch;
+  margin-bottom: 10ch;
+  width: 420px;
+  background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+  background: transparent;
+  border: 2px solid var(--clr-neutral-100);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, -2);
+  color: #fff;
+  border-radius: 10px;
+  padding: 30px 40px;
+}
+.wrapper1 {
+    margin-left: auto; /* Set left margin to auto */
+    margin-right: 50rem; /* Move the div to the right by 50rem */
+    width: 80%; /* Adjust the width as needed */
+    max-width: 800px; /* Set a maximum width if desired */
+    max-height: 700px; /* Adjust the height as needed */
+    overflow-y: auto;
+    position: relative;
+    background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+    background: transparent;
+    border: 2px solid var(--clr-neutral-100);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, -2);
+    color: #fff;
+    border-radius: 10px;
+    padding: 0px 40px;
+}
+.main-card, .wrapperMain{
+    width: 520px;
+
+}
+.wrapper:hover {
+  transform: scale(1.05);
+  transition: 500ms ease;
+}
+.wrapper .btn1 {
+  width: 100%;
+  height: 45px;
+  background: #993232;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, -1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #ffff;
+  font-weight: 600;
+
+}
+.wrapper .btn2 {
+  width: 100%;
+  height: 45px;
+  background: #ffff;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, -1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  font-weight: 600;
+
+}
+
+
+
+.prireg {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: smaller;
+    padding-bottom: 1rem;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Add background color for better visibility */
+    color: #fff; /* Text color */
+}
+tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+#datetime {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 2rem;
+  padding-right: 5rem;
+  padding-top: 3rem;
+  text-align: center;
+
+}
+#datenow {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+.main-card, p{  
+    display: block;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+
+}
+.orangetext {
+    color: #FF6600;
+}
+table {
+    display: table-cell;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+    border-color: gray;
+}
+.table>:not(caption)>*>* {
+    padding: 0.5rem 0.5rem ;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+
+table td {
+    display: block;
+}
+tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+th {
+    display: table-cell;
+    vertical-align: inherit;
+    font-weight: bold;
+    text-align: -internal-center;
+}
+.text-start {
+    text-align: left!important;
+}
+.tbody {
+    display: block;
+    overflow-y: auto;
+    max-height: inherit; /* Inherit the max-height from the parent container */
+}
+.table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #333;
+    width: 100rem;
+    z-index: 1; /* Ensure the header stays above other content */
+}
+.modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 400px;
+            background-color: #535252;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+            background: transparent;
+            border: 2px solid var(--clr-neutral-100);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 10px rgba(0, 0, 0, -2);
+            color: #fff;
+            border-radius: 10px;
+            padding: 30px 40px;
+        }
+
+        .modal-content {
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 24px; /* Adjust the font size to make the X mark bigger */
+        }
+
+        textarea {
+            width: calc(100% - 20px);
+            height: 150px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        #confirmBtn {
+            width: 100%;
+            height: 45px;
+            background: #ffff;
+            border: none;
+            outline: none;
+            border-radius: 40px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, -1);
+            cursor: pointer;
+            font-size: 16px;
+            color: #333;
+            font-weight: 600;
+        }
+        .delete-btn {
+            background-color: #ff0000;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+</style>
+</head>
+<body>
+<div class="maincontainer">
+    <div class="container">
+        <h2 class="greetings">Good <span class="dayparting"></span>, <span class="username"></span></h2>
+        <div class="main-card">
+            <div class="wrapper">
+                <p style="font-size: 20px;">You timed in at <span id="timeIn"class="orangetext"></span>
+                    and your work ends at <span id="timeEnd"class="orangetext"></span>.</p>
+                <button id="timeOutBtn" type="submit" class="btn1">Time Out</button>
+    
+            </div>
+    
+        </div>
+        <div class="report-card">
+            <div class="wrapper">
+                <p>You can add your report here E.g Tasks, progress report, etc.</p>
+                <button type="submit" class="btn2">Add Daily Report</button>
+    
+            </div>
+    
+        </div>
+        <div class="report-display">
+            <div class="wrapper1">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col" class="text-start">Tasks Update (PM)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+    </div>
+    
+    <div class="prireg">© Johnlex Time Keeping. All rights reserved.<br>
+                Powered by Johnlex Systems
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <textarea id="reportText" placeholder="Enter your report here..."></textarea>
+            <button id="confirmBtn">Confirm</button>
+        </div>
+    </div>
+</div>
+<!-- Dynamic time and date -->
+<div id="datetime">
+    <div id="datenow"></div>
+    <div class="details" id="clock"></div>
+  </div>
+<script>
+        function updateTime() {
+        const now = new Date();
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const dateString = now.toLocaleDateString('en-US', dateOptions);
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+        document.getElementById('datenow').textContent = 'Today is ' + dateString;
+        document.getElementById('clock').textContent = timeString;
+
+        // Determine the time of day
+        const hour = now.getHours();
+        let dayparting = 'Morning';
+
+        if (hour >= 12 && hour < 18) {
+            dayparting = 'Afternoon';
+        } else if (hour >= 18) {
+            dayparting = 'Evening';
+        }
+
+        // Update greeting message based on the time of day
+        document.querySelector('.dayparting').textContent = dayparting;
+    }
+    updateTime(); // Call the function initially
+
+    // Update time every second
+    setInterval(updateTime, 1000);
+
+
+    window.onload = function() {
+    // Retrieve username from local storage
+    var loginUsername = localStorage.getItem('loginUsername');
+
+    // Update greeting message with the retrieved username
+    document.querySelector('.username').textContent = loginUsername;
+
+    // Retrieve Time In details from local storage
+    const timeIn = localStorage.getItem('timeIn');
+
+    // Retrieve Time End details from local storage
+    const timeEnd = localStorage.getItem('timeEnd');
+
+    // Display Time In and Time End details
+    document.getElementById('timeIn').textContent = timeIn;
+    document.getElementById('timeEnd').textContent = timeEnd;
+
+        // Function to handle "Time Out" button click
+        document.getElementById('timeOutBtn').addEventListener('click', function() {
+        // Calculate the current time in AM/PM format
+        const now = new Date();
+        const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+
+        // Store the timeOut value in localStorage
+        localStorage.setItem('timeOutEND', timeString);
+
+        // Redirect to tkTOMessage.htm
+        redirectToTimeoutMessage();
+    });
+
+
+}
+    // Function to redirect to tkTOMessage.htm
+    function redirectToTimeoutMessage() {
+        window.location.href = 'tkTOMessage.htm';
+    }
+</script>
+
+<script>
+    // Get the modal
+    var modal = document.getElementById('myModal');
+
+    // Get the button that opens the modal
+    var btn = document.querySelector('.btn2');
+
+    // Get the <span> element that closes the modal
+    var span = document.getElementsByClassName('close')[0];
+
+    // When the user clicks the button, open the modal
+    btn.onclick = function() {
+        modal.style.display = 'block';
+    }
+
+    // When the user clicks on <span> (x), close the modal
+    span.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    // Event listener for the Confirm button
+    document.getElementById('confirmBtn').addEventListener('click', function() {
+    var reportText = document.getElementById('reportText').value;
+    // Do something with the report text, e.g., save it
+    console.log(reportText);
+    
+    // Add the text to the table as a new row
+    addRow(reportText);
+    
+    // Clear the text box
+    document.getElementById('reportText').value = '';
+    
+    // Close the modal
+    modal.style.display = 'none';
+});
+
+function addRow(text) {
+    var table = document.querySelector('.table');
+    var tbody = table.querySelector('tbody');
+    var row = document.createElement('tr');
+    var cell = document.createElement('td');
+    cell.textContent = text;
+    cell.classList.add('text-start'); // Add the class to align text left
+    row.appendChild(cell);
+    
+    // Create delete button
+    var deleteButton = document.createElement('button');
+    deleteButton.textContent = 'Delete';
+    deleteButton.classList.add('delete-btn');
+    deleteButton.addEventListener('click', function() {
+        // Remove the corresponding <td> when the delete button is clicked
+        row.remove();
+    });
+    cell.appendChild(deleteButton);
+    
+    tbody.appendChild(row);
+}
+
+</script>
+</body>
+</html>

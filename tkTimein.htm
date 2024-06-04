@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lex Time keeping - Time in</title>
+<style>
+:root{
+  --clr-neutral-900: hsl(207, 19%, 9%);
+  --clr-neutral-100: hsl(0, 0%, 100%);
+  --clr-accent-400: hsl(142, 09%, 61%)
+
+}
+
+body {
+  display: grid;
+  min-height: 100vh;
+  line-height: 1.6;
+  /* background-color: var(--clr-neutral-900); */
+  background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: sans-serif;
+  background-color: #98c0cd;
+  color: #fff;
+}
+.greetings {
+    color: #fff;
+    width: 100%; /* Ensure heading takes full width */
+    text-align: center; /* Center the text */
+    margin-bottom: 10px; /* Add some space below the heading */
+
+}
+
+/*Cards*/
+.container {
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center; /* Align items to the start of the flex container */
+        height: 300px; /* Set a height for the container */
+}
+
+.main-card{
+    display: flex;
+  justify-content: center; /* Center the content horizontally */
+  align-items: center; /* Center the content vertically */
+  flex-direction: column; /* Stack the content vertically */
+  color: var(--clr-neutral-100);
+  background-size: cover;
+  padding: 10rem 0 0;
+  max-height: 100ch;
+  border-radius: 0.5rem;
+}
+/*WRAPPERS*/
+.wrapper {
+    margin-left: auto; /* Set left margin to auto */
+  margin-right: auto; /* Set right margin to auto */
+  width: 420px;
+  background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+  background: transparent;
+  border: 2px solid var(--clr-neutral-100);
+  backdrop-filter: blur(5px);
+  box-shadow: 0 0 10px rgba(0, 0, 0, -2);
+  color: #fff;
+  border-radius: 10px;
+  padding: 30px 50px;
+}
+.wrapper:hover {
+  transform: scale(1.05);
+  transition: 500ms ease;
+}
+.wrapper .btn1 {
+  width: 100%;
+  height: 45px;
+  background: #33a042;
+  border: none;
+  outline: none;
+  border-radius: 40px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, -1);
+  cursor: pointer;
+  font-size: 16px;
+  color: #ffff;
+  font-weight: 600;
+
+}
+
+
+.prireg {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: smaller;
+    padding-bottom: 1rem;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Add background color for better visibility */
+    color: #fff; /* Text color */
+}
+tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+#datetime {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 2rem;
+  padding-right: 5rem;
+  padding-top: 3rem;
+  text-align: center;
+
+}
+#datenow {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+</style>
+</head>
+<body>
+<div class="maincontainer">
+    <div class="container">
+        <h2 class="greetings">Good <span class="dayparting"></span>, <span class="username"></span></h2>
+        <div class="main-card">
+            <div class="wrapper">
+                <p style="text-align: center;">Your work Starts at 7:00 AM and ends at 3:30 PM. <p style="text-align: center;">Thank you</p></p>
+                <button id="timeInBtn" type="submit" class="btn1">Time In</button>
+    
+            </div>
+    
+        </div>
+    </div>
+    
+    <div class="prireg">© Johnlex Time Keeping. All rights reserved.<br>
+                Powered by Johnlex Systems
+    </div>
+</div>
+<!-- Dynamic time and date -->
+<div id="datetime">
+    <div id="datenow"></div>
+    <div class="details" id="clock"></div>
+  </div>
+
+<script>
+    function updateTime() {
+        const now = new Date();
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+        const dateString = now.toLocaleDateString('en-US', dateOptions);
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+        document.getElementById('datenow').textContent = 'Today is ' + dateString;
+        document.getElementById('clock').textContent = timeString;
+
+        // Determine the time of day
+        const hour = now.getHours();
+        let dayparting = 'Morning';
+
+        if (hour >= 12 && hour < 18) {
+            dayparting = 'Afternoon';
+        } else if (hour >= 18) {
+            dayparting = 'Evening';
+        }
+
+        // Update greeting message based on the time of day
+        document.querySelector('.dayparting').textContent = dayparting;
+    }
+    updateTime(); // Call the function initially
+
+    // Update time every second
+    setInterval(updateTime, 1000);
+
+window.onload = function() {
+    // Retrieve username from local storage
+    var loginUsername = localStorage.getItem('loginUsername');
+    
+    // Update greeting message with the retrieved username
+    document.querySelector('.username').textContent = loginUsername;
+
+    // Event listener for the timeInBtn click event
+    document.getElementById('timeInBtn').addEventListener('click', function() {
+        const now = new Date();
+        const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+        const timeString = now.toLocaleTimeString('en-US', timeOptions);
+        
+        // Add 8 hours to the current time
+        const timeEnd = new Date(now.getTime() + 8 * 60 * 60 * 1000).toLocaleTimeString('en-US', timeOptions);
+
+        localStorage.setItem('timeIn', timeString); // Store timeIn in local storage
+        localStorage.setItem('timeEnd', timeEnd); // Store timeEnd in local storage
+
+        redirectToTimeoutPage();
+    });
+
+    function redirectToTimeoutPage() {
+        window.location.href = 'tkTimeout.htm';
+    }
+}
+
+</script>
+</body>
+</html>

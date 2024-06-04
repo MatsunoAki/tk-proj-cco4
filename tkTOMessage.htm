@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lex Time Keeping - Time Out</title>
+<style>
+    :root {
+      --clr-neutral-900: hsl(207, 19%, 9%);
+      --clr-neutral-100: hsl(0, 0%, 100%);
+      --clr-accent-400: hsl(142, 09%, 61%)
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: sans-serif
+    }
+    
+    body {
+      display: grid;
+      min-height: 100vh;
+      place-items: center;
+      line-height: 1.6;
+      /* background-color: var(--clr-neutral-900); */
+      background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+      background-size: cover;
+      background-position: center;
+      font-family: 'ProximaNova-bold', Arial, Serif;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      text-align: center;
+      background-color: #98c0cd;
+      color: #fff;
+    }
+    
+    .float-start {
+      float: left!important;
+    }
+    
+    .main-card {
+      position: center;
+      color: var(--clr-neutral-100);
+      background-size: cover;
+      padding: 10rem 0 0;
+      width: 70ch;
+      max-height: 100ch;
+      border-radius: 0.5rem;
+    }
+    
+    .wrapper {
+      margin-left: 5ch;
+      margin-bottom: 30ch;
+      width: 520px;
+      background-image: url(https://images.pexels.com/photos/2603464/pexels-photo-2603464.jpeg?cs=srgb&dl=pexels-aleksandar-pasaric-2603464.jpg&fm=jpg);
+      background: transparent;
+      border: 2px solid var(--clr-neutral-100);
+      backdrop-filter: blur(5px);
+      box-shadow: 0 0 10px rgba(0, 0, 0, -2);
+      color: #fff;
+      border-radius: 10px;
+      padding: 50px 50px 50px;
+    }
+    
+    .wrapper:hover {
+      transform: scale(1.05);
+      transition: 500ms ease;
+    }
+    
+    .wrapper h1 {
+      font-size: 36px;
+      text-align: center;
+    }
+    
+    .wrapper .input-box {
+      position: relative;
+      width: 100%;
+      height: 50px;
+      margin: 30px 0;
+    }
+    
+    .input-box input {
+      width: 100%;
+      height: 100%;
+      background: transparent;
+      border: none;
+      outline: none;
+      border: 2px solid #fff;
+      border-radius: 40px;
+      font-size: 16px;
+      color: #fff;
+      padding: 20px 45px 20px 20px;
+    }
+    
+    .input-box input::placeholder {
+      color: #fff;
+    }
+    
+    .input-box i {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translatey(-50%);
+      font-size: 20px;
+    }
+    
+    .wrapper .remember-forgot {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14.5px;
+      margin: -15px 0 15px;
+    }
+    
+    .remember-forgot label input {
+      accent-color: #fff;
+      margin-right: 3px;
+    }
+    
+    .remember-forgot a {
+      color: #fff;
+      text-decoration: none;
+    }
+    
+    .remember-forgot a:hover {
+      text-decoration: underline;
+    }
+    
+    .wrapper .btnLogin {
+        width: 100%;
+      height: 45px;
+      background: #fff;
+      border: none;
+      outline: none;
+      border-radius: 40px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, -1);
+      cursor: pointer;
+      font-size: 16px;
+      color: #333;
+      font-weight: 600;
+      margin-top: 2rem;
+    }
+    .wrapper .btnRegister {
+      width: 100%;
+      height: 45px;
+      background: #fff;
+      border: none;
+      outline: none;
+      border-radius: 40px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, -1);
+      cursor: pointer;
+      font-size: 16px;
+      color: #333;
+      font-weight: 600;
+      margin-top: 2rem;
+    }
+    
+    .wrapper .register-link {
+      font-size: 14.5px;
+      text-align: center;
+      margin: 20px 0 15px;
+    }
+    
+    .register-link p a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    
+    .register-link p a:hover {
+      text-decoration: underline;
+    }
+    
+    .prireg {
+      position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: smaller;
+    padding-bottom: 1rem;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Add background color for better visibility */
+    color: #fff; /* Text color */
+    }
+    
+    #datetime {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: white;
+  font-size: 2rem;
+  padding-right: 5rem;
+  padding-top: 3rem;
+  text-align: center;
+
+    }
+    #datenow {
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    }
+    .orangetext {
+    color: #FF6600;
+}
+</style>
+</head>
+<body>
+    <div class="maincontainer">
+        <div class="main-card">
+          <div class="wrapper">
+            <form id="homeForm">
+              <p>You timed in at <span id="timeIn"class="orangetext"></span>
+                and you timed out at <span id="timeOut"class="orangetext"></span></p>
+                <h2>Thank you.</h2>
+            </form>
+          </div>
+          <div class="prireg">© Johnlex Time Keeping. All rights reserved.<br>
+            Powered by Johnlex Systems</div>
+        </div>
+        </div>
+      </div>
+      </div>
+      <!-- Dynamic time and date -->
+      <div id="datetime">
+        <div id="datenow"></div>
+        <div class="details" id="clock"></div>
+      </div>
+<script>
+        window.onload = function(){
+        // Retrieve Time In details from local storage
+        const timeIn = localStorage.getItem('timeIn');
+    
+        // Retrieve Time End details from local storage
+        const timeEnd = localStorage.getItem('timeEnd');
+    
+        // Retrieve Time Out details from local storage
+        const timeOut = localStorage.getItem('timeOutEND');
+    
+        // Display Time In, Time Out, and Time End details
+        document.getElementById('timeIn').textContent = timeIn;
+        document.getElementById('timeOut').textContent = timeOut;
+        document.getElementById('timeEnd').textContent = timeEnd;
+
+        // Calculate time difference
+        const timeInMs = new Date(timeIn).getTime();
+        const timeOutMs = new Date(timeOut).getTime();
+        const timeDifference = timeOutMs - timeInMs;
+        const hoursDifference = timeDifference / (1000 * 60 * 60); // Convert milliseconds to hours
+
+        // Check if the difference is less than 8 hours and timeEnd is not equal to timeOut
+        if (hoursDifference < 8 && timeEnd !== timeOut) {
+            // Show the alert box
+            alert("You're Undertime");
+        }
+
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(1);
+        };
+    }
+    function updateTime() {
+      const now = new Date();
+      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
+      const dateString = now.toLocaleDateString('en-US', dateOptions);
+      const timeString = now.toLocaleTimeString('en-US', timeOptions);
+      document.getElementById('datenow').textContent = 'Today is ' + dateString;
+      document.getElementById('clock').textContent = timeString;
+    }
+    updateTime(); // Call the function initially
+  // Update time every second
+  setInterval(updateTime, 1000);
+
+</script>
+</body>
+</html>
+    
